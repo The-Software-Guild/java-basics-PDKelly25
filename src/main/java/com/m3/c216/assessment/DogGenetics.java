@@ -21,7 +21,7 @@ public class DogGenetics {
         System.out.printf("%s's Esquire is: %n" +
                 "%n%d St. Bernard %n%d Chihuahua %n%d Dramatic RedNosed Asian Pug %n%d Common Cur %n%d King Doberman%n" +
                         "%nWow! That's quite the dog!",
-                name, d.randomiser(limit), d.randomiser(limit), d.randomiser(limit), d.randomiser(limit), d.randomiser(limit));
+                name, d.randomiser(limit), d.randomiser(limit), d.randomiser(limit), d.randomiser(limit), limit-1);
                       //calls function which returns the percentage instead of storing it in variables.
     }
 }
