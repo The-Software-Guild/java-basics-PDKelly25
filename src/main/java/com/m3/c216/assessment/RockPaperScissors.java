@@ -8,17 +8,17 @@ public class RockPaperScissors {
     private static int tie=0;
     private static int win=0;
     private static int lose=0;
+    private static Random r = new Random();
+    private static Scanner scanner = new Scanner(System.in);
 
     public void setRounds(int rounds) {
         this.rounds = rounds;
     }
 
     public void play(){
-        Scanner game_input = new Scanner(System.in);
         System.out.println("Rock ('1'), Paper ('2'), or Scissors ('3')?");
-        int user_hand = game_input.nextInt();
-        Random r = new Random();
-        int comp_hand = r.nextInt(3);
+        int user_hand = scanner.nextInt();
+        int comp_hand = r.nextInt(3)+1;
         if (comp_hand == user_hand){
             System.out.println("Tie!");
             tie++;
@@ -54,6 +54,5 @@ public class RockPaperScissors {
                 play_again = scanner.next();
             }
         }
-
     }
 }
