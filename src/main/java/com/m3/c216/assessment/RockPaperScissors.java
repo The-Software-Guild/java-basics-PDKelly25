@@ -4,16 +4,9 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class RockPaperScissors {
-    private int rounds;
-    private static int tie=0;
-    private static int win=0;
-    private static int lose=0;
+    private static int tie, win, lose=0;
     private static Random r = new Random();
     private static Scanner scanner = new Scanner(System.in);
-
-    public void setRounds(int rounds) {
-        this.rounds = rounds;
-    }
 
     public void play(){
         System.out.println("Rock ('1'), Paper ('2'), or Scissors ('3')?");
@@ -34,9 +27,10 @@ public class RockPaperScissors {
     }
 
     public static void main(String[] args) {
-        String play_again = "y";
-        Scanner scanner = new Scanner(System.in);
-        while (play_again.equals("y")) {
+        String reset_score;
+        String play_again;
+        scanner = new Scanner(System.in);
+        while (true) {
             System.out.println("Enter the number of rounds you want to play between 1 and 10, inclusive.");
             int input = scanner.nextInt();
             if (input < 1 || input > 10) {
@@ -44,15 +38,21 @@ public class RockPaperScissors {
                 break;
             } else {
                 RockPaperScissors game = new RockPaperScissors();
-                game.setRounds(input); // setter method
                 for (int x = 0; x < input; x++) {
                     game.play();
                 }
-                String winner = (win>lose) ? "User! Congratulations!" : "Computer! Better luck next time.";
+                String winner = (win>lose) ? "User. Congratulations!" : (win==lose ? "No winner! It's a Tie!" : "Computer. Better luck next time.");
                 System.out.printf("User Wins: %d, Computer Wins: %d, Ties %d %nOverall Winner: %s", win, lose, tie, winner);
-                System.out.println("\ndo you want to play again? 'y' - yes, 'n' - no");
+                System.out.println("Do you want to play again? 'y' - yes, 'n' - no");
                 play_again = scanner.next();
+                if (play_again.equals("y")){
+                    System.out.println("Do you want to reset the score? 'y' - yes, 'n' - no");
+                    reset_score = scanner.next();
+                    if (reset_score.equals("y")) {win = 0; lose = 0; tie = 0;}
+                }
+                else break;
             }
         }
     }
 }
+
