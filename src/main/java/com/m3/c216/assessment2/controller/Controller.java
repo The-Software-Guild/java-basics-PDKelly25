@@ -1,76 +1,111 @@
 package com.m3.c216.assessment2.controller;
 
 import com.m3.c216.assessment2.dao.DvdDao;
-import com.m3.c216.assessment2.dao.DvdDaoImpl;
+import com.m3.c216.assessment2.dao.DvdDaoException;
+import com.m3.c216.assessment2.dto.DVD;
 import com.m3.c216.assessment2.ui.DvdView;
-import com.m3.c216.assessment2.ui.UserIO;
-import com.m3.c216.assessment2.ui.UserIOConsoleImpl;
 
-import java.util.Locale;
+import java.util.List;
 
 public class Controller {
 
-    private DvdDao dao = new DvdDaoImpl();
-    private UserIO io = new UserIOConsoleImpl();
-    private DvdView view = new DvdView();
+    private DvdDao dao;
+    private DvdView view;
+//    private UserIO io = new UserIOConsoleImpl();
 
     public Controller(DvdDao dao, DvdView view){
         this.dao = dao;
         this.view = view;
     }
 
-    public void run() {
+    public void run(){
         String menuSelection;
-        while (true) {
-            io.printout("Please select an option below:");
-            io.printout("ADD - to add a DVD to the collection." +
-                    "\nREMOVE - to remove a DVD from the collection." +
-                    "\nEDIT - to edit a DVD in the collection." +
-                    "\nLIST - to list the current DVDs in the collection." +
-                    "\nDISPLAY - to display info about a DVD in the collection" +
-                    "\nSEARCH - to search for a DVD in the collection" +
-                    "\nLOAD - to load a DVD from the collection." +
-                    "\nSAVE - to save a DVD back into the collection." +
-                    "\nEXIT - to exit the program.");
-
-            menuSelection = GetSelection();
-
-            switch (menuSelection.toUpperCase()) {
-                case "ADD":
-                    io.printout("Add DVD");
-                    break;
-                case "REMOVE":
-                    io.printout("Remove DVD");
-                    break;
-                case "EDIT":
-                    io.printout("Edit DVD");
-                    break;
-                case "LIST":
-                    io.printout("List DVDs");
-                    break;
-                case "DISPLAY":
-                    io.printout("Display info");
-                    break;
-                case "SEARCH":
-                    io.printout("Search for DVD");
-                    break;
-                case "LOAD":
-                    io.printout("Load DVD from file");
-                    break;
-                case "SAVE":
-                    io.printout("Save DVD to file");
-                    break;
-                case "EXIT":
-                    io.printout("GOOD BYE");
-                    break;
-                default:
-                    io.printout("UNKNOWN COMMAND");
+        boolean running = true;
+        try {
+            while(running) {
+                menuSelection = GetSelection();
+                switch (menuSelection.toUpperCase()) {
+                    case "ADD":
+                        addDvd();
+                        break;
+                    case "REMOVE":
+                        removeDvd();
+                        break;
+                    case "EDIT":
+                        editDvd();
+                        break;
+                    case "LIST":
+                        listDVDs();
+                        break;
+                    case "DISPLAY":
+                        display();
+                        break;
+                    case "SEARCH":
+                        search();
+                        break;
+                    case "LOAD":
+                        load();
+                        break;
+                    case "SAVE":
+                        save();
+                        break;
+                    case "EXIT":
+                        exitMessage();
+                        break;
+                    default:
+                        unknownCommand();
+                }
             }
+            exitMessage();
 
+        } catch (DvdDaoException e){
+            view.displayErrorMessage(e.getMessage());
         }
     }
+
+    private void editDvd() {
+
+    }
+
+    private void addDvd() throws DvdDaoException {
+        view.displayCreateDvdBanner();
+        DVD newDVD = view.getNewDVDInfo();
+        dao.addDVD(newDVD);
+        view.displayCreateSuccessBanner();
+    }
+
+    private void removeDvd() throws DvdDaoException {
+        view.displayRemoveDvdBanner();
+        String title = view.selectDVD();
+        DVD removed = dao.removeDVD(title);
+        view.displayRemoveResult(removed);
+    }
+
+    private void listDVDs() throws DvdDaoException {
+        view.displayDisplayAllBanner();
+        List<DVD> dvdList = dao.getAllDVDs();
+        view.displayDVDList(dvdList);
+    }
+
+    private void load(){
+
+    }
+
+    private void display() {
+
+    }
+
+    private void unknownCommand() {
+        view.displayUnknownCommandBanner();
+    }
+
     private String GetSelection() {
         return view.printMenuAndGetSelection();
+    }
+
+    private void exitMessage() throws DvdDaoException {
+        dao.writeDVD();
+        view.displayExitBanner();
     }
 }
 

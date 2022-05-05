@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DVD {
-    private String title, mpaa, director, studio, rating;
-    private Double review;
+    private String title, mpaa, director, studio, review;
+    private Double rating;
     private Date release_date;
     //private String[] mpaa = new String[]{"G", "PG", "PG-13", "R", "NC-17"};
     //private double rating; //standard rating and any comments
     //private Map dvd_collecion = new HashMap();
 
-    public DVD(String title, Date release_date, String mpaa, String director, String studio, String rating, Double review){
+    public DVD(String title, Date release_date, String mpaa, String director, String studio, Double rating, String review){
         this.title=title;
         this.release_date = release_date;
         this.mpaa = mpaa;
@@ -62,19 +62,19 @@ public class DVD {
         this.studio = studio;
     }
 
-    public String getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
-    public Double getReview() {
+    public String getReview() {
         return review;
     }
 
-    public void setReview(Double review) {
+    public void setReview(String review) {
         this.review = review;
     }
 }

@@ -28,11 +28,11 @@ public class UserIOConsoleImpl implements UserIO{
 
     /**
      * If input contains rating as a float, separate float item from string
-     * @param input includes date_released info
+     * @param user_input includes date_released info
      * @return a double separated from within a string
      */
-    public Double readDouble(String input){
-
+    public Double readDouble(String user_input){
+        return input.nextDouble();
     }
 
 //    /**
