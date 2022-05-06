@@ -5,6 +5,7 @@ import com.m3.c216.assessment2.dao.DvdDaoException;
 import com.m3.c216.assessment2.dto.DVD;
 import com.m3.c216.assessment2.ui.DvdView;
 
+import java.sql.Date;
 import java.util.List;
 
 public class Controller {
@@ -63,8 +64,51 @@ public class Controller {
         }
     }
 
-    private void editDvd() {
+    private void search() throws DvdDaoException{
+        view.displaySearchDvdBanner();
+        dao.getDVD(view.selectDVD());
+    }
 
+    private void save() throws DvdDaoException{
+        dao.writeDVD();
+    }
+
+    private void editDvd() throws DvdDaoException {
+        view.displayEditBanner();
+        DVD edit = dao.getDVD(view.selectDVD());
+        String select = view.editDVD();
+        while(true) {
+            switch (select.toUpperCase()) {
+                case "TITLE":
+                    String initial = edit.getTitle();
+                    edit.setTitle(view.editChoice(select));
+                    dao.removeDVD(initial);
+                    dao.addDVD(edit);
+                    break;
+                case "DATE":
+                    edit.setRelease_date(Date.valueOf(view.editChoice(select)));
+                    break;
+                case "MPAA":
+                    edit.setMpaa(view.editChoice(select));
+                    break;
+                case "DIRECTOR":
+                    edit.setDirector(view.editChoice(select));
+                    break;
+                case "STUDIO":
+                    edit.setStudio(view.editChoice(select));
+                    break;
+                case "RATING":
+                    edit.setRating(Double.parseDouble(view.editChoice(select)));
+                    break;
+                case "REVIEW":
+                    edit.setReview(view.editChoice(select));
+                    break;
+                case "EXIT":
+                    exitMessage();
+                default:
+                    unknownCommand();
+            }
+        }
     }
 
     private void addDvd() throws DvdDaoException {
@@ -87,12 +131,12 @@ public class Controller {
         view.displayDVDList(dvdList);
     }
 
-    private void load(){
-
+    private void load() throws DvdDaoException {
+        dao.loadCollection();
     }
 
-    private void display() {
-
+    private void display() throws DvdDaoException {
+        view.displayDVDinfo(dao.getDVD(view.selectDVD()));
     }
 
     private void unknownCommand() {

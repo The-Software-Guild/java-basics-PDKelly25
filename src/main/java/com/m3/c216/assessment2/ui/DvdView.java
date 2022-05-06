@@ -16,6 +16,10 @@ public class DvdView {
         return io.readString("Please enter the DVD Name.");
     }
 
+    public void displaySearchDvdBanner() {
+        io.printout("=== Search for DVD ===");
+    }
+
     public void displayCreateDvdBanner() {
         io.printout("=== Create DVD ===");
     }
@@ -43,6 +47,11 @@ public class DvdView {
         io.readString("Please hit enter to continue.");
     }
 
+    public void displayDVDinfo(DVD dvd){
+        io.printout(dvd.toString());
+        io.readString("Please hit enter to continue.");
+    }
+
     public String printMenuAndGetSelection() {
         io.printout("Please select an option below:");
         io.printout("ADD - to add a DVD to the collection." +
@@ -59,9 +68,7 @@ public class DvdView {
 
     public void displayDVDList(List<DVD> dvdList) {
         for (DVD currentDVD : dvdList) {
-            io.printout(String.format("%n%s %n%s %n%s %n%s %n%s %n%f %n%s",
-                    currentDVD.getTitle(), currentDVD.getRelease_date(), currentDVD.getMpaa(),
-                    currentDVD.getDirector(), currentDVD.getStudio(), currentDVD.getRating(), currentDVD.getReview()));
+            io.printout(currentDVD.toString());
         }
         io.readString("Please hit enter to continue.");
     }
@@ -78,17 +85,25 @@ public class DvdView {
         io.printout("=== Goodbye! ===");
     }
 
+    public void displayEditBanner(){
+        io.printout("=== Edit DVD ===");
+    }
+
     public String editDVD(){
         io.printout("Please select an option below:");
-        io.printout("ADD - to add a DVD to the collection." +
-                "\nTITLE - to remove a DVD from the collection." +
-                "\nRELEASE - to edit a DVD in the collection." +
-                "\nMPAA - to list the current DVDs in the collection." +
-                "\nDIRECTOR - to display info about a DVD in the collection" +
-                "\nSTUDIO - to search for a DVD in the collection" +
-                "\nREVIEW - to load a DVD from the collection." +
-                "\nSAVE - to save a DVD back into the collection.");
+        io.printout("TITLE - to change the title." +
+                "\nRELEASE - to change the release date." +
+                "\nMPAA - to change the MPAA Rating." +
+                "\nDIRECTOR - to change the director's name." +
+                "\nSTUDIO - to change the studio." +
+                "\nRATING - to change your rating." +
+                "\nREVIEW - to change your review." +
+                "\nEXIT - to change your review.");
         return io.readString("User Input: ");
+    }
+
+    public String editChoice(String choice){
+        return io.readString("Please enter the new " + choice);
     }
 
     public DVD getNewDVDInfo() {

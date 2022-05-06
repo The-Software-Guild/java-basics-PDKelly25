@@ -77,4 +77,11 @@ public class DVD {
     public void setReview(String review) {
         this.review = review;
     }
+
+    @Override
+    public String toString(){
+        return String.format(String.format("%n%s %n%s %n%s %n%s %n%s %n%f %n%s",
+                this.title, this.release_date, this.mpaa,
+                this.director, this.studio, this.rating, this.review));
+    }
 }
