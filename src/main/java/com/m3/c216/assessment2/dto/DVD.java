@@ -1,8 +1,9 @@
 package com.m3.c216.assessment2.dto;
 
+import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+//import java.util.HashMap;
+//import java.util.Map;
 
 public class DVD {
     private String title, mpaa, director, studio, review;
@@ -80,8 +81,9 @@ public class DVD {
 
     @Override
     public String toString(){
-        return String.format(String.format("%n%s %n%s %n%s %n%s %n%s %n%f %n%s",
-                this.title, this.release_date, this.mpaa,
-                this.director, this.studio, this.rating, this.review));
+        DecimalFormat format = new DecimalFormat("0.#"); //remove trailing zeros
+        return String.format(String.format("%n%s %n%s %n%s %n%s %n%s %n%s %n%s",
+                title, release_date, mpaa,
+                director, studio, format.format(rating), review));
     }
 }

@@ -8,7 +8,7 @@ import com.m3.c216.assessment2.ui.UserIO;
 import com.m3.c216.assessment2.ui.UserIOConsoleImpl;
 
 public class AssessmentApp {
-    public static final String DVD_FILE = "dvd.txt";
+    public static final String DVD_FILE = "src/dvd.txt";
 
     public static void main(String[] args) {
         UserIO myIo = new UserIOConsoleImpl();

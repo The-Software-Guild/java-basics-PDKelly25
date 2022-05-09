@@ -11,6 +11,7 @@ public class DvdDaoImpl implements DvdDao {
     private final Map<String, DVD> dvdMap; //<K = title, V = dvd>
     private Scanner scanner;
     private final String file_path;
+
     public DvdDaoImpl(String file_path){
         this.file_path=file_path;
         dvdMap = new HashMap<>();
@@ -27,8 +28,8 @@ public class DvdDaoImpl implements DvdDao {
                     tokens[3],
                     tokens[4],
                     //Double.parseDouble(tokens[5].split(" ")[0]),
-                    Double.parseDouble(tokens[5].split("(?i)(?=[a-z])",1).toString()),
-                    tokens[5].split("(?i)(?=[a-z])",2).toString());
+                    Double.parseDouble(tokens[5].split(" ")[0]),
+                    tokens[5].split("[^a-zA-Z ]+")[1].trim());
         } catch (Exception e){
             System.out.println("ERROR: failed to load file");
             return null;
@@ -86,14 +87,14 @@ public class DvdDaoImpl implements DvdDao {
             out = new PrintWriter(new FileWriter(file_path));
         } catch (IOException e) {
             throw new DvdDaoException(
-                    "Could not save student data.", e);
+                    "Could not save DVD data.", e);
         }
 
         String dvdText;
         List<DVD> dvdList = this.getAllDVDs();
         for (DVD currentDVD : dvdList) {
 
-             dvdText = marshallDVD(currentDVD);
+            dvdText = marshallDVD(currentDVD);
 
             out.println(dvdText);
 
@@ -122,7 +123,13 @@ public class DvdDaoImpl implements DvdDao {
 
     public DVD getDVD(String title) throws DvdDaoException {
         loadCollection();
-        return dvdMap.get(title);
+        DVD dvd = dvdMap.get(title);
+        if (dvd == null) {
+            throw new DvdDaoException("Error: Title does not exist.");
+        }
+        else {
+            return dvd;
+        }
     }
 
     @Override

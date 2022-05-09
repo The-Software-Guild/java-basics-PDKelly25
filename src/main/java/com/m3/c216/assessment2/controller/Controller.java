@@ -23,7 +23,7 @@ public class Controller {
         String menuSelection;
         boolean running = true;
         try {
-            while(running) {
+            do {
                 menuSelection = GetSelection();
                 switch (menuSelection.toUpperCase()) {
                     case "ADD":
@@ -47,16 +47,13 @@ public class Controller {
                     case "LOAD":
                         load();
                         break;
-                    case "SAVE":
-                        save();
-                        break;
                     case "EXIT":
-                        exitMessage();
-                        break;
+                        running=false;
+                        continue;
                     default:
                         unknownCommand();
                 }
-            }
+            } while(running);
             exitMessage();
 
         } catch (DvdDaoException e){
@@ -70,6 +67,7 @@ public class Controller {
     }
 
     private void save() throws DvdDaoException{
+        view.displaySavedBanner();
         dao.writeDVD();
     }
 
@@ -77,7 +75,9 @@ public class Controller {
         view.displayEditBanner();
         DVD edit = dao.getDVD(view.selectDVD());
         String select = view.editDVD();
-        while(true) {
+        String changed;
+//        boolean run=true;
+//        do {
             switch (select.toUpperCase()) {
                 case "TITLE":
                     String initial = edit.getTitle();
@@ -86,7 +86,13 @@ public class Controller {
                     dao.addDVD(edit);
                     break;
                 case "DATE":
-                    edit.setRelease_date(Date.valueOf(view.editChoice(select)));
+                    try {
+                        changed = view.editChoice(select);
+                        Date new_date = Date.valueOf(changed);
+                        edit.setRelease_date(new_date);
+                    } catch (IllegalArgumentException e) {
+                        throw new DvdDaoException("Error: must enter valid date in format yyyy-mm-dd");
+                    }
                     break;
                 case "MPAA":
                     edit.setMpaa(view.editChoice(select));
@@ -98,17 +104,19 @@ public class Controller {
                     edit.setStudio(view.editChoice(select));
                     break;
                 case "RATING":
-                    edit.setRating(Double.parseDouble(view.editChoice(select)));
+                    try {
+                        edit.setRating(Double.parseDouble(view.editChoice(select)));
+                    } catch(IllegalArgumentException e) {
+                        throw new DvdDaoException("Error: must enter a rating and a comment.");
+                    }
                     break;
                 case "REVIEW":
                     edit.setReview(view.editChoice(select));
                     break;
-                case "EXIT":
-                    exitMessage();
                 default:
                     unknownCommand();
             }
-        }
+//        } while(run);
     }
 
     private void addDvd() throws DvdDaoException {
@@ -132,6 +140,7 @@ public class Controller {
     }
 
     private void load() throws DvdDaoException {
+        view.displayLoadedBanner();
         dao.loadCollection();
     }
 
@@ -148,7 +157,7 @@ public class Controller {
     }
 
     private void exitMessage() throws DvdDaoException {
-        dao.writeDVD();
+        save();
         view.displayExitBanner();
     }
 }

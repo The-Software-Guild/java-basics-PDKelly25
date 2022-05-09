@@ -23,16 +23,8 @@ public class UserIOConsoleImpl implements UserIO{
      */
     @Override
     public String readString(String prompt) {
+        printout(prompt);
         return input.nextLine();
-    }
-
-    /**
-     * If input contains rating as a float, separate float item from string
-     * @param user_input includes date_released info
-     * @return a double separated from within a string
-     */
-    public Double readDouble(String user_input){
-        return input.nextDouble();
     }
 
 //    /**

@@ -1,5 +1,6 @@
 package com.m3.c216.assessment2.ui;
 
+import com.m3.c216.assessment2.dao.DvdDaoException;
 import com.m3.c216.assessment2.dto.DVD;
 
 import java.sql.Date;
@@ -32,6 +33,7 @@ public class DvdView {
     public void displayErrorMessage(String errorMsg) {
         io.printout("=== ERROR ===");
         io.printout(errorMsg);
+        io.readString("Please hit enter to continue.");
     }
 
     public void displayRemoveDvdBanner() {
@@ -52,6 +54,11 @@ public class DvdView {
         io.readString("Please hit enter to continue.");
     }
 
+    public void displayLoadedBanner(){
+        io.printout("=== DVD Collection Loaded ===");
+        io.readString("Please hit enter to continue.");
+    }
+
     public String printMenuAndGetSelection() {
         io.printout("Please select an option below:");
         io.printout("ADD - to add a DVD to the collection." +
@@ -61,7 +68,8 @@ public class DvdView {
                 "\nDISPLAY - to display info about a DVD in the collection" +
                 "\nSEARCH - to search for a DVD in the collection" +
                 "\nLOAD - to load a DVD from the collection." +
-                "\nSAVE - to save a DVD back into the collection.");
+                "\nSAVE - to save a DVD back into the collection." +
+                "\nEXIT - to exit.");
 
         return io.readString("User Input: ");
     }
@@ -103,19 +111,39 @@ public class DvdView {
     }
 
     public String editChoice(String choice){
-        return io.readString("Please enter the new " + choice);
+        String changed =  io.readString("Please enter the new " + choice);
+        return changed;
     }
 
-    public DVD getNewDVDInfo() {
+    public DVD getNewDVDInfo() throws DvdDaoException {
         String title = io.readString("Please enter DVD title");
-        String release = io.readString("Please enter DVD release date in format: dd-mm-yyyy");
+        String release = io.readString("Please enter DVD release date in format: yyyy-mm-dd");
         String mpaa = io.readString("Please enter the MPAA of this DVD");
         String director = io.readString("Please enter the director of the DVD");
         String studio = io.readString("Please enter the studio that produced this DVD");
-        String feedback = io.readString("Please give a rating out of 10 (e.g. 6.5) and a comment on the DVD");
-        DVD currentDVD = new DVD(title, Date.valueOf(release), mpaa, director, studio,
-                Double.parseDouble(feedback.split("(?i)(?=[a-z])",1).toString()),
-                feedback.split("(?i)(?=[a-z])",2).toString());
-        return currentDVD;
+        String feedback = io.readString("Please give a rating out of 10 and a comment on the DVD");
+
+        Date date = null;
+        try {
+            date = Date.valueOf(release);
+        } catch (IllegalArgumentException e) {
+            displayErrorMessage("Error: must enter valid date in format yyyy-mm-dd");
+        }
+
+        double rating = 0; //must be intialised
+        try {
+            rating = Double.parseDouble(feedback.split(" ")[0]);
+            feedback = feedback.split("[^a-zA-Z ]+")[1].trim();
+        } catch (IllegalArgumentException e) {
+            throw new DvdDaoException("Error: must enter a rating and a comment.");
+        }
+
+        return new DVD(title, date, mpaa, director, studio,
+                rating, feedback);
+    }
+
+    public void displaySavedBanner() {
+        io.printout("=== Saved to Collection ===");
+        io.readString("Please hit enter to continue.");
     }
 }
